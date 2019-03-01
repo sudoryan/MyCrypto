@@ -1,25 +1,24 @@
 import * as ensTypes from '../types';
 import * as types from './types';
 
-const REQUESTS_INITIAL_STATE: types.ENSDomainRequestsState = {};
+const REQUESTS_INITIAL_STATE: types.NameServiceDomainRequestsState = {};
 
 const resolveDomainRequested = (
-  state: types.ENSDomainRequestsState,
+  state: types.NameServiceDomainRequestsState,
   action: ensTypes.ResolveDomainRequested
-): types.ENSDomainRequestsState => {
+): types.NameServiceDomainRequestsState => {
   const { domain } = action.payload;
   const nextDomain = {
     ...state[domain],
     state: types.RequestStates.pending
   };
-
   return { ...state, [domain]: nextDomain };
 };
 
 const resolveDomainSuccess = (
-  state: types.ENSDomainRequestsState,
+  state: types.NameServiceDomainRequestsState,
   action: ensTypes.ResolveDomainSucceeded
-): types.ENSDomainRequestsState => {
+): types.NameServiceDomainRequestsState => {
   const { domain, domainData } = action.payload;
   const nextDomain = {
     data: domainData,
@@ -30,9 +29,9 @@ const resolveDomainSuccess = (
 };
 
 const resolveDomainCached = (
-  state: types.ENSDomainRequestsState,
+  state: types.NameServiceDomainRequestsState,
   action: ensTypes.ResolveDomainCached
-): types.ENSDomainRequestsState => {
+): types.NameServiceDomainRequestsState => {
   const { domain } = action.payload;
   const nextDomain = {
     ...state[domain],
@@ -43,9 +42,9 @@ const resolveDomainCached = (
 };
 
 const resolveDomainFailed = (
-  state: types.ENSDomainRequestsState,
+  state: types.NameServiceDomainRequestsState,
   action: ensTypes.ResolveDomainFailed
-): types.ENSDomainRequestsState => {
+): types.NameServiceDomainRequestsState => {
   const { domain, error } = action.payload;
   const nextDomain = {
     error: true,
@@ -56,18 +55,18 @@ const resolveDomainFailed = (
   return { ...state, [domain]: nextDomain };
 };
 
-export function ensDomainRequestsReducer(
-  state: types.ENSDomainRequestsState = REQUESTS_INITIAL_STATE,
+export function nameServiceDomainRequestsReducer(
+  state: types.NameServiceDomainRequestsState = REQUESTS_INITIAL_STATE,
   action: ensTypes.ResolveDomainAction
-): types.ENSDomainRequestsState {
+): types.NameServiceDomainRequestsState {
   switch (action.type) {
-    case ensTypes.ENSActions.RESOLVE_DOMAIN_REQUESTED:
+    case ensTypes.NameServiceActions.RESOLVE_DOMAIN_REQUESTED:
       return resolveDomainRequested(state, action);
-    case ensTypes.ENSActions.RESOLVE_DOMAIN_SUCCEEDED:
+    case ensTypes.NameServiceActions.RESOLVE_DOMAIN_SUCCEEDED:
       return resolveDomainSuccess(state, action);
-    case ensTypes.ENSActions.RESOLVE_DOMAIN_FAILED:
+    case ensTypes.NameServiceActions.RESOLVE_DOMAIN_FAILED:
       return resolveDomainFailed(state, action);
-    case ensTypes.ENSActions.RESOLVE_DOMAIN_CACHED:
+    case ensTypes.NameServiceActions.RESOLVE_DOMAIN_CACHED:
       return resolveDomainCached(state, action);
     default:
       return state;
